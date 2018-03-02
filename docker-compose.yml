@@ -1,0 +1,19 @@
+version: "3"
+services:
+  shell:
+    build: .
+    volumes:
+    - .:/go/src/advent
+    command: /bin/sh
+    working_dir: /go/src/advent
+  gotest:
+    build: .
+    volumes:
+    - .:/go/src/advent
+    command: ./gotest.sh
+    working_dir: /go/src/advent
+  godoc:
+    build: .
+    command: godoc -http=:8080
+    ports:
+    - "8080:8080"
