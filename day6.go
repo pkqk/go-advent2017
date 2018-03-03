@@ -8,35 +8,36 @@ import (
 	"strings"
 )
 
-var seen map[string]bool
+var seen map[string]int
 
 func main() {
 	fmt.Println("Advent of Code - Day 6")
 
-	seen = make(map[string]bool)
+	seen = make(map[string]int)
 
 	input, _ := ioutil.ReadFile("day6.txt")
 	state := scanLine(string(input))
-	//state = []int{0, 2, 7, 0}
 
 	steps := 0
+	var distance int
 
 	for ; ; steps++ {
 		fmt.Println(state)
-		if visit(state) {
+		if visited, last_step := visit(state, steps); visited {
+			distance = steps - last_step
 			break
 		}
 		redistribute(state)
 	}
 
-	fmt.Println("state", state, "steps", steps)
+	fmt.Println("state", state, "steps", steps, "distance", distance)
 }
 
-func visit(state []int) bool {
+func visit(state []int, step int) (bool, int) {
 	key := keyFor(state)
-	_, visited := seen[key]
-	seen[key] = true
-	return visited
+	last_step, visited := seen[key]
+	seen[key] = step
+	return visited, last_step
 }
 
 func keyFor(state []int) string {
