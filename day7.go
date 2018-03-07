@@ -11,6 +11,7 @@ import (
 type Node struct {
   name string
   weight int
+  treeWeight int
   children []string
   root bool
 }
@@ -18,7 +19,7 @@ type Node struct {
 // fwft (72) -> ktlj, cntj, xhth
 var re = regexp.MustCompile(`(\w+) \((\d+)\)( -> (.*))?`)
 
-func parseLines(lines []string) {
+func parseTree(lines []string) (string, map[string]*Node) {
   nodes := make(map[string]*Node)
 
   for _, line := range lines {
@@ -31,7 +32,7 @@ func parseLines(lines []string) {
     } else {
       children = []string{}
     }
-    nodes[name] = &Node{name, weight, children, true}
+    nodes[name] = &Node{name: name, weight: weight, children: children, root: true}
   }
 
   for _, node := range nodes {
@@ -40,11 +41,50 @@ func parseLines(lines []string) {
     }
   }
 
+  var root string
   for _, node := range nodes {
     if node.root {
-      fmt.Println("root", node.name)
+      root = node.name
     }
   }
+
+  return root, nodes
+}
+
+func calcWeight(root *Node, nodes map[string]*Node) int {
+  weight := root.weight
+  for _, node := range root.children {
+    weight += calcWeight(nodes[node], nodes)
+  }
+  root.treeWeight = weight
+  return weight
+}
+
+func printWeights(root *Node, nodes map[string]*Node, indent string) {
+  fmt.Println(indent, root.name, root.weight + root.treeWeight)
+  for _, node := range root.children {
+    printWeights(nodes[node], nodes, indent + " ")
+  }
+}
+
+func findUnbalance(root *Node, nodes map[string]*Node, indent string) bool {
+  if len(root.children) == 0 {
+    return true
+  }
+  balanced := true
+  firstWeight := nodes[root.children[0]].treeWeight
+  for i := 1; i < len(root.children); i++ {
+    if nodes[root.children[i]].treeWeight != firstWeight {
+      balanced = false
+    }
+  }
+  if !balanced {
+    for _, name := range root.children {
+      fmt.Println(indent, name, "weight", nodes[name].treeWeight, nodes[name].weight)
+      findUnbalance(nodes[name], nodes, indent + "  ")
+    }
+  }
+  return balanced
 }
 
 func main() {
@@ -52,5 +92,10 @@ func main() {
 
 	input, _ := ioutil.ReadFile("day7.txt")
   lines := strings.Split(string(input), "\n")
-  parseLines(lines)
+  root, nodes := parseTree(lines)
+  fmt.Println("root", nodes[root].name)
+  calcWeight(nodes[root], nodes)
+  fmt.Println("weight", nodes[root].treeWeight)
+  //printWeights(nodes[root], nodes, "")
+  findUnbalance(nodes[root], nodes, "")
 }
