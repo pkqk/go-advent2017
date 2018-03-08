@@ -1,4 +1,4 @@
-package main
+package day6
 
 import (
 	"bufio"
@@ -8,36 +8,33 @@ import (
 	"strings"
 )
 
-var seen map[string]int
+var seen map[string]bool
 
-func main() {
-	fmt.Println("Advent of Code - Day 6")
+func Part1(path string) {
+	seen = make(map[string]bool)
 
-	seen = make(map[string]int)
-
-	input, _ := ioutil.ReadFile("day6.txt")
+	input, _ := ioutil.ReadFile(path)
 	state := scanLine(string(input))
+	//state = []int{0, 2, 7, 0}
 
 	steps := 0
-	var distance int
 
 	for ; ; steps++ {
 		fmt.Println(state)
-		if visited, last_step := visit(state, steps); visited {
-			distance = steps - last_step
+		if visit(state) {
 			break
 		}
 		redistribute(state)
 	}
 
-	fmt.Println("state", state, "steps", steps, "distance", distance)
+	fmt.Println("state", state, "steps", steps)
 }
 
-func visit(state []int, step int) (bool, int) {
+func visit(state []int) bool {
 	key := keyFor(state)
-	last_step, visited := seen[key]
-	seen[key] = step
-	return visited, last_step
+	_, visited := seen[key]
+	seen[key] = true
+	return visited
 }
 
 func keyFor(state []int) string {
