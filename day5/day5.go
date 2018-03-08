@@ -1,4 +1,4 @@
-package main
+package day5
 
 import (
 	"bufio"
@@ -8,13 +8,17 @@ import (
 	"strings"
 )
 
-func main() {
-	fmt.Println("Advent of Code - Day 5")
-
-	input, _ := ioutil.ReadFile("day5.txt")
+func Part1(path string) {
+	input, _ := ioutil.ReadFile(path)
 	jumps := readInstructions(string(input))
 
-	fmt.Printf("%d\n", runMachine(jumps))
+	fmt.Printf("%d\n", runMachine(jumps, false))
+}
+func Part2(path string) {
+	input, _ := ioutil.ReadFile(path)
+	jumps := readInstructions(string(input))
+
+	fmt.Printf("%d\n", runMachine(jumps, true))
 }
 
 func readInstructions(input string) []int {
@@ -31,7 +35,7 @@ func readInstructions(input string) []int {
 	return result
 }
 
-func runMachine(jumps []int) int {
+func runMachine(jumps []int, part2 bool) int {
 	steps := 0
 	pos := 0
 	var jump int
@@ -40,7 +44,7 @@ func runMachine(jumps []int) int {
 			break
 		}
 		jump = jumps[pos]
-		if jump > 2 {
+		if part2 && jump > 2 {
 			jumps[pos]--
 		} else {
 			jumps[pos]++
