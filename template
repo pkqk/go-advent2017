@@ -1,0 +1,14 @@
+package day<n>
+
+import "days"
+import (
+	"fmt"
+)
+
+func init() {
+	days.Register("<n>a", Part1)
+	days.Register("<n>b", Part2)
+}
+
+func Part1(path string) {
+}
