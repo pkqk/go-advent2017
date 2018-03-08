@@ -16,10 +16,18 @@ type Node struct {
   root bool
 }
 
+type TreeNode struct {
+	name string
+	weight int
+	children []*TreeNode
+	totalWeight int
+	balanced bool
+}
+
 // fwft (72) -> ktlj, cntj, xhth
 var re = regexp.MustCompile(`(\w+) \((\d+)\)( -> (.*))?`)
 
-func parseTree(lines []string) (string, map[string]*Node) {
+func parseTree(lines []string) *TreeNode {
   nodes := make(map[string]*Node)
 
   for _, line := range lines {
@@ -48,43 +56,72 @@ func parseTree(lines []string) (string, map[string]*Node) {
     }
   }
 
-  return root, nodes
+  return buildTree(root, nodes)
 }
 
-func calcWeight(root *Node, nodes map[string]*Node) int {
-  weight := root.weight
-  for _, node := range root.children {
-    weight += calcWeight(nodes[node], nodes)
-  }
-  root.treeWeight = weight
-  return weight
+func buildTree(name string, nodes map[string]*Node) *TreeNode {
+	node := nodes[name]
+	children := make([]*TreeNode, 0)
+
+	for _, child := range node.children {
+		children = append(children, buildTree(nodes[child].name, nodes))
+	}
+	return &TreeNode{name: node.name, weight: node.weight, children: children}
 }
 
-func printWeights(root *Node, nodes map[string]*Node, indent string) {
-  fmt.Println(indent, root.name, root.weight + root.treeWeight)
-  for _, node := range root.children {
-    printWeights(nodes[node], nodes, indent + " ")
-  }
+func calcWeight(node *TreeNode) int {
+	sum := node.weight
+	for _, child := range node.children {
+		sum += calcWeight(child)
+	}
+	node.totalWeight = sum
+	return sum
 }
 
-func findUnbalance(root *Node, nodes map[string]*Node, indent string) bool {
-  if len(root.children) == 0 {
-    return true
-  }
-  balanced := true
-  firstWeight := nodes[root.children[0]].treeWeight
-  for i := 1; i < len(root.children); i++ {
-    if nodes[root.children[i]].treeWeight != firstWeight {
-      balanced = false
-    }
-  }
-  if !balanced {
-    for _, name := range root.children {
-      fmt.Println(indent, name, "weight", nodes[name].treeWeight, nodes[name].weight)
-      findUnbalance(nodes[name], nodes, indent + "  ")
-    }
-  }
-  return balanced
+func calcBalance(node *TreeNode) bool {
+	if len(node.children) < 2 {
+		node.balanced = true
+		return true
+	}
+	balanced := true
+	weight := node.children[0].totalWeight
+	for i := 1; i < len(node.children); i++ {
+		balanced = balanced && weight == node.children[i].totalWeight
+	}
+	node.balanced = balanced
+	return balanced
+}
+
+func findProblem(node *TreeNode, goalWeight int) {
+	if !node.balanced {
+		balanced := true
+		weights := make(map[int]int)
+		for _, child := range node.children {
+			balanced = balanced && child.balanced
+			weights[child.totalWeight]++
+		}
+		if !balanced {
+			var badWeight, goodWeight int
+			for weight, count := range(weights) {
+				if count == 1 {
+					badWeight = weight
+				} else {
+					goodWeight = weight
+				}
+			}
+			if badWeight == 0 {
+				fmt.Println("found problem", node.name)
+				diff := goalWeight - node.totalWeight
+				fmt.Println("answer", node.weight + diff)
+			} else {
+				for _, child := range node.children {
+					if child.totalWeight == badWeight {
+						findProblem(child, goodWeight)
+					}
+				}
+			}
+		}
+	}
 }
 
 func main() {
@@ -92,10 +129,8 @@ func main() {
 
 	input, _ := ioutil.ReadFile("day7.txt")
   lines := strings.Split(string(input), "\n")
-  root, nodes := parseTree(lines)
-  fmt.Println("root", nodes[root].name)
-  calcWeight(nodes[root], nodes)
-  fmt.Println("weight", nodes[root].treeWeight)
-  //printWeights(nodes[root], nodes, "")
-  findUnbalance(nodes[root], nodes, "")
+  root := parseTree(lines)
+	calcWeight(root)
+	calcBalance(root)
+	findProblem(root, 0)
 }
