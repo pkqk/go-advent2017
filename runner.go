@@ -11,6 +11,7 @@ import (
   _ "day5"
   _ "day6"
   _ "day7"
+  _ "day8"
 )
 
 func main() {
