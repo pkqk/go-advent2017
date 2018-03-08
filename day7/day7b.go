@@ -1,14 +1,13 @@
-package main
+package day7
 
 import (
 	"fmt"
 	"io/ioutil"
-  "regexp"
   "strconv"
 	"strings"
 )
 
-type Node struct {
+type LoadNode struct {
   name string
   weight int
   treeWeight int
@@ -24,11 +23,8 @@ type TreeNode struct {
 	balanced bool
 }
 
-// fwft (72) -> ktlj, cntj, xhth
-var re = regexp.MustCompile(`(\w+) \((\d+)\)( -> (.*))?`)
-
 func parseTree(lines []string) *TreeNode {
-  nodes := make(map[string]*Node)
+  nodes := make(map[string]*LoadNode)
 
   for _, line := range lines {
     matches := re.FindStringSubmatch(line)
@@ -40,7 +36,7 @@ func parseTree(lines []string) *TreeNode {
     } else {
       children = []string{}
     }
-    nodes[name] = &Node{name: name, weight: weight, children: children, root: true}
+    nodes[name] = &LoadNode{name: name, weight: weight, children: children, root: true}
   }
 
   for _, node := range nodes {
@@ -59,7 +55,7 @@ func parseTree(lines []string) *TreeNode {
   return buildTree(root, nodes)
 }
 
-func buildTree(name string, nodes map[string]*Node) *TreeNode {
+func buildTree(name string, nodes map[string]*LoadNode) *TreeNode {
 	node := nodes[name]
 	children := make([]*TreeNode, 0)
 
@@ -124,10 +120,8 @@ func findProblem(node *TreeNode, goalWeight int) {
 	}
 }
 
-func main() {
-	fmt.Println("Advent of Code - Day 7")
-
-	input, _ := ioutil.ReadFile("day7.txt")
+func Part2(path string) {
+	input, _ := ioutil.ReadFile(path)
   lines := strings.Split(string(input), "\n")
   root := parseTree(lines)
 	calcWeight(root)
