@@ -7,6 +7,7 @@ import (
 import (
   "day1"
   "day2"
+  "day3"
 )
 
 func main() {
@@ -25,6 +26,10 @@ func main() {
     day2.Part1(input)
   case "2b":
     day2.Part2(input)
+  case "3a":
+    day3.Part1(input)
+  case "3b":
+    day3.Part2(input)
   default:
     fmt.Println("Implement Day", day)
   }

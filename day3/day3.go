@@ -1,8 +1,7 @@
-package main
+package day3
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 )
 
@@ -50,9 +49,8 @@ func FollowSpiral(n, step int, point Point) Point {
 	return FollowSpiral(n, step+1, point)
 }
 
-func main() {
-	fmt.Println("Advent of Code - Day 3")
-	n, _ := strconv.Atoi(os.Args[1])
+func Part1(input string) {
+	n, _ := strconv.Atoi(input)
 	point := SpiralPoint(n)
 	fmt.Println("Position", point)
 	fmt.Println("Steps", abs(point.x)+abs(point.y))
