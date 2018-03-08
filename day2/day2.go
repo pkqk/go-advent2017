@@ -1,4 +1,4 @@
-package main
+package day2
 
 import (
 	"bufio"
@@ -64,14 +64,20 @@ func scanLine(input string) []int {
 	return result
 }
 
-func main() {
-	fmt.Println("Advent of Code - Day 2")
+func Part1(path string) {
+  run(path, rowCheckSum)
+}
 
-	input, _ := ioutil.ReadFile("day2.txt")
+func Part2(path string) {
+  run(path, rowEvenDivsor)
+}
+
+func run(path string, checksum_func func([]int) int) {
+	input, _ := ioutil.ReadFile(path)
 	checksum := 0
 	for _, line := range strings.Split(string(input), "\n") {
 		row := scanLine(line)
-		check := rowEvenDivsor(row)
+		check := checksum_func(row)
 		checksum += check
 	}
 	fmt.Println(checksum)

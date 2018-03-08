@@ -1,10 +1,12 @@
 package main
 
 import (
-  "day1"
   "fmt"
   "os"
-  "strconv"
+)
+import (
+  "day1"
+  "day2"
 )
 
 func main() {
@@ -12,16 +14,18 @@ func main() {
     fmt.Println("usage: go run runner.go n input")
     os.Exit(1)
   }
-  if n, err := strconv.Atoi(os.Args[1]); err == nil {
-    fmt.Println("Advent of Code - Day", n)
-    switch n {
-    case 1:
-      day1.Run(os.Args[2])
-    default:
-      fmt.Println("Implement Day", n)
-    }
-  } else {
-    fmt.Println(os.Args[1], "should be the number of the Day")
-    os.Exit(1)
+  day, input := os.Args[1], os.Args[2]
+  fmt.Println("Advent of Code - Day", day)
+  switch day {
+  case "1a":
+    day1.Part1(input)
+  case "1b":
+    day1.Part2(input)
+  case "2a":
+    day2.Part1(input)
+  case "2b":
+    day2.Part2(input)
+  default:
+    fmt.Println("Implement Day", day)
   }
 }
