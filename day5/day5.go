@@ -4,9 +4,8 @@ import (
 	"bufio"
 	"days"
 	"fmt"
-	"io/ioutil"
 	"strconv"
-	"strings"
+	"os"
 )
 
 func init() {
@@ -16,20 +15,20 @@ func init() {
 
 
 func Part1(path string) {
-	input, _ := ioutil.ReadFile(path)
-	jumps := readInstructions(string(input))
+	input, _ := os.Open(path)
+	jumps := readInstructions(input)
 
 	fmt.Printf("%d\n", runMachine(jumps, false))
 }
 func Part2(path string) {
-	input, _ := ioutil.ReadFile(path)
-	jumps := readInstructions(string(input))
+	input, _ := os.Open(path)
+	jumps := readInstructions(input)
 
 	fmt.Printf("%d\n", runMachine(jumps, true))
 }
 
-func readInstructions(input string) []int {
-	scanner := bufio.NewScanner(strings.NewReader(input))
+func readInstructions(input *os.File) []int {
+	scanner := bufio.NewScanner(bufio.NewReader(input))
 	scanner.Split(bufio.ScanWords)
 	var result []int
 	for scanner.Scan() {
