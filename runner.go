@@ -1,17 +1,16 @@
 package main
 
 import (
+  "days"
   "fmt"
   "os"
-)
-import (
-  "day1"
-  "day2"
-  "day3"
-  "day4"
-  "day5"
-  "day6"
-  "day7"
+  _ "day1"
+  _ "day2"
+  _ "day3"
+  _ "day4"
+  _ "day5"
+  _ "day6"
+  _ "day7"
 )
 
 func main() {
@@ -21,36 +20,5 @@ func main() {
   }
   day, input := os.Args[1], os.Args[2]
   fmt.Println("Advent of Code - Day", day)
-  switch day {
-  case "1a":
-    day1.Part1(input)
-  case "1b":
-    day1.Part2(input)
-  case "2a":
-    day2.Part1(input)
-  case "2b":
-    day2.Part2(input)
-  case "3a":
-    day3.Part1(input)
-  case "3b":
-    day3.Part2(input)
-  case "4a":
-    day4.Part1(input)
-  case "4b":
-    day4.Part2(input)
-  case "5a":
-    day5.Part1(input)
-  case "5b":
-    day5.Part2(input)
-  case "6a":
-    day6.Part1(input)
-  case "6b":
-    day6.Part2(input)
-  case "7a":
-    day7.Part1(input)
-  case "7b":
-    day7.Part2(input)
-  default:
-    fmt.Println("Implement Day", day)
-  }
+  days.Call(day, input)
 }

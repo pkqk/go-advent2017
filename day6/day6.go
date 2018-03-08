@@ -1,5 +1,6 @@
 package day6
 
+import "days"
 import (
 	"bufio"
 	"fmt"
@@ -7,6 +8,11 @@ import (
 	"strconv"
 	"strings"
 )
+
+func init() {
+	days.Register("6a", Part1)
+	days.Register("6b", Part2)
+}
 
 var seen map[string]bool
 

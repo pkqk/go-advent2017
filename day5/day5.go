@@ -2,11 +2,18 @@ package day5
 
 import (
 	"bufio"
+	"days"
 	"fmt"
 	"io/ioutil"
 	"strconv"
 	"strings"
 )
+
+func init() {
+	days.Register("5a", Part1)
+	days.Register("5b", Part2)
+}
+
 
 func Part1(path string) {
 	input, _ := ioutil.ReadFile(path)

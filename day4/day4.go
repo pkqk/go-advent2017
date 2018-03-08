@@ -1,11 +1,17 @@
 package day4
 
 import (
+	"days"
 	"fmt"
 	"io/ioutil"
 	"sort"
 	"strings"
 )
+
+func init() {
+	days.Register("4a", Part1)
+	days.Register("4b", Part2)
+}
 
 func Part1(path string) {
 	input, _ := ioutil.ReadFile(path)

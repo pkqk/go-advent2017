@@ -2,11 +2,17 @@ package day2
 
 import (
 	"bufio"
+	"days"
 	"fmt"
 	"io/ioutil"
 	"strconv"
 	"strings"
 )
+
+func init() {
+	days.Register("2a", Part1)
+	days.Register("2b", Part2)
+}
 
 func TestRowCheck() {
 	input := [][]int{

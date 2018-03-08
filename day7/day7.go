@@ -1,5 +1,6 @@
 package day7
 
+import "days"
 import (
 	"fmt"
 	"io/ioutil"
@@ -7,6 +8,11 @@ import (
   "strconv"
 	"strings"
 )
+
+func init() {
+	days.Register("7a", Part1)
+	days.Register("7b", Part2)
+}
 
 type Node struct {
   name string

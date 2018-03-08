@@ -1,9 +1,15 @@
 package day3
 
 import (
+	"days"
 	"fmt"
 	"strconv"
 )
+
+func init() {
+	days.Register("3a", Part1)
+	days.Register("3b", Part2)
+}
 
 type Point struct {
 	x, y int

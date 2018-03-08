@@ -1,10 +1,16 @@
 package day1
 
 import (
+  "days"
   "fmt"
   "strconv"
   "io/ioutil"
 )
+
+func init() {
+	days.Register("1a", Part1)
+	days.Register("1b", Part2)
+}
 
 func Part1(path string) {
 	input, _ := ioutil.ReadFile(path)
