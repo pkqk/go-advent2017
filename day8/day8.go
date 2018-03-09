@@ -11,7 +11,7 @@ import (
 
 func init() {
 	days.Register("8a", Part1)
-	// days.Register("8b", Part2)
+	days.Register("8b", Part2)
 }
 
 type Instruction struct {
@@ -46,9 +46,15 @@ func (instr Instruction) Execute(registers map[string]int) {
 func Part1(path string) {
 	input, _ := os.Open(path)
 	instructions := readInstructions(input)
-	registers := runMachine(instructions)
+	registers := runMachine(instructions, false)
 	key, max := maxRegister(registers)
-	fmt.Println("Max register", key, max)	
+	fmt.Println("Max register", key, max)
+}
+
+func Part2(path string) {
+	input, _ := os.Open(path)
+	instructions := readInstructions(input)
+	runMachine(instructions, true)
 }
 
 func maxRegister(registers map[string]int) (string, int) {
@@ -86,10 +92,18 @@ func readInstructions(input *os.File) []Instruction {
 	return instructions
 }
 
-func runMachine(instructions []Instruction) map[string]int {
+func runMachine(instructions []Instruction, part2 bool) map[string]int {
 	registers := make(map[string]int)
+	max := 0
 	for _, instr := range instructions {
 		instr.Execute(registers)
+		_, max_reg := maxRegister(registers)
+		if max_reg > max {
+			max = max_reg
+		}
+	}
+	if part2 {
+		fmt.Println("highest value", max)
 	}
 	return registers
 }
