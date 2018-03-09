@@ -47,24 +47,20 @@ func Part1(path string) {
 	input, _ := os.Open(path)
 	instructions := readInstructions(input)
 	registers := runMachine(instructions)
-	maxRegister(registers)
+	key, max := maxRegister(registers)
+	fmt.Println("Max register", key, max)	
 }
 
-func maxRegister(registers map[string]int) {
+func maxRegister(registers map[string]int) (string, int) {
 	var key string
-	var max int
-	for reg, val := range registers {
-		key = reg
-		max = val
-		break
-	}
+	max := 0
 	for reg, val := range registers {
 		if val > max {
 			max = val
 			key = reg
 		}
 	}
-	fmt.Println("Max register", key, max)
+	return key, max
 }
 
 func readInstructions(input *os.File) []Instruction {
