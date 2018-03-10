@@ -10,7 +10,7 @@ import (
 
 func init() {
 	days.Register("9a", Part1)
-	// days.Register("9b", Part2)
+	days.Register("9b", Part2)
 }
 
 func Part1(path string) {
@@ -24,6 +24,21 @@ func Part1(path string) {
 	go keepScore(cleanstream, score)
 	total := totalScore(score)
 	fmt.Println("total score:", total)
+}
+
+func Part2(path string) {
+	score := make(chan int, 1)
+	garbagescore := make(chan int, 1)
+	instream := make(chan rune)
+	safestream := make(chan rune)
+	cleanstream := make(chan rune)
+	go readInput(path, instream)
+	go bangEscape(instream, safestream)
+	go garbageCollectAndCount(safestream, garbagescore, cleanstream)
+	go keepScore(cleanstream, score)
+	go totalScore(score)
+	garbageTotal := totalScore(garbagescore)
+	fmt.Println("total garbage:", garbageTotal)
 }
 
 func readInput(path string, output chan rune) {
@@ -66,7 +81,7 @@ func garbageCollect(input chan rune, output chan rune) {
 	inGarbage := false
 	for {
 		if r, more := <-input; more {
-			if r == '<' {
+			if !inGarbage && r == '<' {
 				inGarbage = true
 			} else if r == '>' {
 				inGarbage = false
@@ -75,6 +90,27 @@ func garbageCollect(input chan rune, output chan rune) {
 			}
 		} else {
 			close(output)
+			break
+		}
+	}
+}
+
+func garbageCollectAndCount(input chan rune, count chan int, output chan rune) {
+	inGarbage := false
+	for {
+		if r, more := <-input; more {
+			if !inGarbage && r == '<' {
+				inGarbage = true
+			} else if r == '>' {
+				inGarbage = false
+			} else if !inGarbage {
+				output <- r
+			} else {
+				count <- 1
+			}
+		} else {
+			close(output)
+			close(count)
 			break
 		}
 	}
