@@ -12,3 +12,6 @@ func init() {
 
 func Part1(path string) {
 }
+
+func Part2(path string) {
+}

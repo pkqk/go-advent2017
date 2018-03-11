@@ -10,6 +10,7 @@ import (
 	_ "day7"
 	_ "day8"
 	_ "day9"
+	_ "day10"
 	"days"
 	"fmt"
 	"os"
