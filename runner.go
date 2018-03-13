@@ -11,13 +11,14 @@ import (
 	_ "day8"
 	_ "day9"
 	_ "day10"
+	_ "day11"
 	"days"
 	"fmt"
 	"os"
 )
 
 func main() {
-	if len(os.Args) < 2 {
+	if len(os.Args) <= 2 {
 		fmt.Println("usage: go run runner.go n input")
 		os.Exit(1)
 	}
