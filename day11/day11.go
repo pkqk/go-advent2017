@@ -25,6 +25,19 @@ func Part1(path string) {
 }
 
 func Part2(path string) {
+	input, _ := os.Open(path)
+	moves := readMoves(input)
+	start := HexLoc{0,0,0}
+	var loc HexLoc
+	maxdistance := 0
+	for _, move := range moves {
+		loc = loc.move(move)
+		distance := loc.distance(start)
+		if distance > maxdistance {
+			maxdistance = distance
+		}
+	}
+	fmt.Println(maxdistance)
 }
 
 // using
