@@ -66,4 +66,15 @@ func deepCount(start string, groups map[string]map[string]bool, seen map[string]
 }
 
 func Part2(path string) {
+	groups := buildGroups(path)
+	visited := make(map[string]bool)
+	deepCount("0", groups, visited)
+	count := 1
+	for src, _ := range(groups) {
+		if _, ok := visited[src]; !ok {
+			deepCount(src, groups, visited)
+			count += 1
+		}
+	}
+	fmt.Println("group count", count)
 }
