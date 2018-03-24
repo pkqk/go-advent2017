@@ -12,6 +12,7 @@ import (
 	_ "day9"
 	_ "day10"
 	_ "day11"
+	_ "day12"
 	"days"
 	"fmt"
 	"os"
